@@ -1,6 +1,7 @@
 // MVC设计模式 - player主要是提供数据和存储数据
 using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(GunController))]
 public class Player : MonoBehaviour
 {
 
@@ -10,10 +11,12 @@ public class Player : MonoBehaviour
 
     // 用于控制player的计算操作
     PlayerController controller;
+    GunController gunController;
 
     void Start()
     {
         controller = GetComponent<PlayerController>();
+        gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
 
     }
@@ -34,11 +37,15 @@ public class Player : MonoBehaviour
         {
             Vector3 point = ray.GetPoint(rayDistance);
             // 测试射线
-            Debug.DrawLine(ray.origin, point, Color.red);
+            // Debug.DrawLine(ray.origin, point, Color.red);
             controller.LookAt(point);
         }
 
-
+        // 射击
+        if (Input.GetMouseButton(0))
+        {
+            gunController.Shoot();
+        }
 
     }
 
