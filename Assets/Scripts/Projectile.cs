@@ -1,18 +1,41 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public LayerMask collisionMask;
     float speed = 10;
 
     public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
     }
-    // 射击子弹
+
     void Update()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        float moveDistance = speed * Time.deltaTime;
+        // 检测物体是否被射中
+        CheckCollisions(moveDistance);
+        transform.Translate(Vector3.forward * moveDistance);
+    }
+    // 用射线模块检测有缺陷 - 这里后期重构
+    void CheckCollisions(float moveDistance)
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
+        // Debug绘制射线
+        // Debug.DrawRay(ray.origin, ray.direction * moveDistance, Color.red, 0.1f);
+        if (Physics.Raycast(ray, out hit, moveDistance, collisionMask, QueryTriggerInteraction.Collide))
+        {
+            OnHitObject(hit);
+        }
     }
 
+    void OnHitObject(RaycastHit hit)
+    {
+        // print(hit.collider.gameObject.name);
+        GameObject.Destroy(gameObject);
+    }
 
 }
