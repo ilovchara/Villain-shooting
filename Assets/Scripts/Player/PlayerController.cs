@@ -19,7 +19,6 @@ public class PlayerController: MonoBehaviour
     // 固定间隔刷新
     void FixedUpdate()
     {
-
         myRigidbody.MovePosition(myRigidbody.position + velocity * Time.fixedDeltaTime);
     }
 

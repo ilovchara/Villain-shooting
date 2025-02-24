@@ -1,8 +1,9 @@
 // MVC设计模式 - player主要是提供数据和存储数据
+using UnityEditor;
 using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(GunController))]
-public class Player : MonoBehaviour
+public class Player : LivingEntity
 {
 
     public float moveSpeed = 5;
@@ -13,8 +14,9 @@ public class Player : MonoBehaviour
     PlayerController controller;
     GunController gunController;
 
-    void Start()
+    protected  override void Start()
     {
+        base.Start();
         controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
