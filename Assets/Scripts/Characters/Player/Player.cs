@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(GunController))]
 public class Player : LivingEntity
 {
-
-    public float moveSpeed = 5;
     // 玩家视角跟随鼠标
     Camera viewCamera;
 
@@ -14,7 +12,7 @@ public class Player : LivingEntity
     PlayerController controller;
     GunController gunController;
 
-    protected  override void Start()
+    protected override void Start()
     {
         base.Start();
         controller = GetComponent<PlayerController>();
@@ -25,11 +23,14 @@ public class Player : LivingEntity
 
     void Update()
     {
-        // 获取用户输入的方法 - Raw不会平滑处理
-        Vector3 moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        Vector3 moveVelocity = moveInput.normalized * moveSpeed;
-        controller.Move(moveVelocity);
 
+        Shooting();
+
+    }
+
+    // 玩家射击
+    void Shooting()
+    {
         // 射线检测
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
