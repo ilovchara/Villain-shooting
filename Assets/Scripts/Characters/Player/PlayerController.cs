@@ -1,13 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
 // MVC设计模式 - Controller主要是控制player的行为
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
 
-#region 移动效果
+    #region 移动效果
     [SerializeField] PlayerInput input;
-    [SerializeField]float moveSpeed = 5f;
+    [SerializeField] float moveSpeed = 5f;
     new Rigidbody rigidbody;
 
     void Awake()
@@ -41,12 +42,16 @@ public class PlayerController : MonoBehaviour
     }
 
     [Obsolete]
+    private Coroutine moveCoroutine;
+
     private void Move(Vector3 moveInput)
     {
-        Vector3 moveAmount =  new Vector3(moveInput.x, 0, moveInput.y) * moveSpeed;
-        rigidbody.velocity = moveAmount;
+        // 持续按键输入时更新刚体的速度
+        Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized; // 保持方向一致
+        rigidbody.velocity = moveDirection * moveSpeed;
     }
-#endregion
+
+    #endregion
 
     // 朝向问题
     public void LookAt(Vector3 lookPoint)
