@@ -1,4 +1,5 @@
 // MVC设计模式 - player主要是提供数据和存储数据
+using System;
 using UnityEditor;
 using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
@@ -12,6 +13,18 @@ public class Player : LivingEntity
     PlayerController controller;
     GunController gunController;
 
+
+    [SerializeField] PlayerInput input;
+    [SerializeField] float moveSpeed = 5f;
+    new Rigidbody rigidbody;
+
+
+    void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody>();
+
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -19,15 +32,53 @@ public class Player : LivingEntity
         gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
 
+        input.EnableGamePlayerInput();
+
     }
 
     void Update()
     {
-
         Shooting();
-
     }
 
+    #region 移动效果
+
+
+    [Obsolete]
+    void OnEnable()
+    {
+        input.onMove += Move;
+        input.onStopMove += StopMove;
+    }
+
+    [Obsolete]
+    void OnDisable()
+    {
+        input.onMove -= Move;
+        input.onStopMove -= StopMove;
+    }
+
+    [Obsolete]
+    private void StopMove()
+    {
+        rigidbody.velocity = Vector3.zero;
+    }
+
+    [Obsolete]
+    private Coroutine moveCoroutine;
+
+    [Obsolete]
+    private void Move(Vector3 moveInput)
+    {
+        // 持续按键输入时更新刚体的速度
+        Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized; // 保持方向一致
+        rigidbody.velocity = moveDirection * moveSpeed;
+    }
+
+    #endregion
+
+
+    #region 射击
     // 玩家射击
     void Shooting()
     {
@@ -51,5 +102,5 @@ public class Player : LivingEntity
         }
 
     }
-
+    #endregion
 }

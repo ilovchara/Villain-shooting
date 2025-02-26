@@ -5,59 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-
-    #region 移动效果
-    [SerializeField] PlayerInput input;
-    [SerializeField] float moveSpeed = 5f;
-    new Rigidbody rigidbody;
-
-    void Awake()
-    {
-        rigidbody = GetComponent<Rigidbody>();
-    }
-
-    void Start()
-    {
-        input.EnableGamePlayerInput();
-    }
-
-    [Obsolete]
-    void OnEnable()
-    {
-        input.onMove += Move;
-        input.onStopMove += StopMove;
-    }
-
-    [Obsolete]
-    void OnDisable()
-    {
-        input.onMove -= Move;
-        input.onStopMove -= StopMove;
-    }
-
-    [Obsolete]
-    private void StopMove()
-    {
-        rigidbody.velocity = Vector3.zero;
-    }
-
-    [Obsolete]
-    private Coroutine moveCoroutine;
-
-    private void Move(Vector3 moveInput)
-    {
-        // 持续按键输入时更新刚体的速度
-        Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized; // 保持方向一致
-        rigidbody.velocity = moveDirection * moveSpeed;
-    }
-
-    #endregion
-
     // 朝向问题
     public void LookAt(Vector3 lookPoint)
     {
         Vector3 heightCorrectedPoint = new Vector3(lookPoint.x, transform.position.y, lookPoint.z);
         transform.LookAt(heightCorrectedPoint);
     }
+
+
+
+
+
+
 
 }
