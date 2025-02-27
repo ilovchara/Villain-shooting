@@ -1,4 +1,4 @@
-// MVC设计模式 - player主要是提供数据和存储数据
+// 1. 玩家的移动效果 2. 玩家的射击效果
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -76,7 +76,6 @@ public class Player : LivingEntity
     }
 
     #endregion
-
 
     #region 射击
     // 玩家射击

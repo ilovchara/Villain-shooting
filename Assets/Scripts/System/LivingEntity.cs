@@ -10,20 +10,9 @@ public class LivingEntity : MonoBehaviour, IDamageable
     // 事件 - 死亡
     public event System.Action OnDeath;
 
-    protected  virtual void Start()
+    protected virtual void Start()
     {
         health = startingHealth;
-    }
-
-    // 伤害 - 设置伤害值和射线
-    public void TakeHit(float damage, RaycastHit hit)
-    {
-        health -= damage;
-
-        if (health <= 0 && !dead)
-        {
-            Die();
-        }
     }
 
     public void Die()
@@ -37,4 +26,20 @@ public class LivingEntity : MonoBehaviour, IDamageable
         GameObject.Destroy(gameObject);
     }
 
+    // 伤害 - 设置伤害值和射线
+    public void TakeHit(float damage, RaycastHit hit)
+    {
+        // To DO
+        TakeDamage(damage);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+
+        if (health <= 0 && !dead)
+        {
+            Die();
+        }
+    }
 }
