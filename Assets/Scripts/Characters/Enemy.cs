@@ -10,15 +10,16 @@ public class Enemy : LivingEntity
     public enum State { Idle, Chasing, Attacking };
     // 记录当前状态
     State currentState;
+    Material skinMaterial;
 
+    Color originalColor;
     NavMeshAgent pathfinder;
     Transform target;
-    // 记录刷新率变量
-    float attackDistanceThreshold = 1.5f;
+    float attackDistanceThreshold = 1.2f;
     float timeBetweenAttacks = 1;
 
+
     float nextAttackTime;
-    // 碰撞半径
     float myCollisionRadius;
     float targetCollisionRadius;
 
@@ -29,6 +30,9 @@ public class Enemy : LivingEntity
         // 默认是追踪状态
 
         pathfinder = GetComponent<NavMeshAgent>();
+        skinMaterial = GetComponent<Renderer>().material;
+        // 保存原始颜色 
+        originalColor = skinMaterial.color;
 
         currentState = State.Chasing;
         target = GameObject.FindGameObjectWithTag("Player").transform;
@@ -65,6 +69,7 @@ public class Enemy : LivingEntity
         float attackSpeed = 3;
         float percent = 0;
 
+        skinMaterial.color = Color.red;
         while (percent <= 1)
         {
             percent += Time.deltaTime * attackSpeed;
@@ -72,6 +77,8 @@ public class Enemy : LivingEntity
             transform.position = Vector3.Lerp(originalPosition, attackPosition, interpolation);
             yield return null;
         }
+
+        skinMaterial.color = originalColor;
         currentState = State.Chasing;
         // 路径追踪 启用
         pathfinder.enabled = true;
