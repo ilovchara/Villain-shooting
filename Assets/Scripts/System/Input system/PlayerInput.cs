@@ -16,8 +16,7 @@ public class PlayerInput : ScriptableObject, InputActions.IGamePlayerActions
     void OnEnable()
     {
         inputActions = new InputActions();
-        inputActions.GamePlayer.SetCallbacks(this);
-        Debug.Log("PlayerInput 已启用");
+        inputActions.GamePlayer.SetCallbacks(this);        
     }
 
     public void DisableAllInputs()
