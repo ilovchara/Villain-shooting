@@ -6,6 +6,7 @@ public class MapGenerator : MonoBehaviour
 {
     public Transform tilePrefab;
     public Transform obstaclePrefab;
+    public float tileSize;
 
     public Vector2 mapSize;
     // 获取障碍物的总数- 计算出比例
@@ -59,7 +60,7 @@ public class MapGenerator : MonoBehaviour
             {
                 Vector3 tilePosition = CoordToPosition(x, y);
                 Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;
-                newTile.localScale = Vector3.one * (1 - outlinePercent);
+                newTile.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
                 newTile.parent = mapHolder;
             }
         }
@@ -80,6 +81,7 @@ public class MapGenerator : MonoBehaviour
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
                 Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * .5f, Quaternion.identity) as Transform;
                 newObstacle.parent = mapHolder;
+                newObstacle.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
             }
 
 
