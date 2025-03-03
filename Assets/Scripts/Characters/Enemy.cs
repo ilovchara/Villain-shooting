@@ -78,13 +78,13 @@ public class Enemy : LivingEntity
         currentState = State.Idle;
     }
 
-
+    // 获取目标之后 扑过去
     IEnumerator Attack()
     {
         currentState = State.Attacking;
         pathfinder.enabled = false;
 
-        // 获取目标之后 扑过去
+        
         Vector3 originalPosition = transform.position;
         Vector3 attackPosition = target.position;
 
