@@ -25,10 +25,17 @@ public class MapGenerator : MonoBehaviour
 
 	Map currentMap;
 
-	void Start()
+	void Awake()
 	{
+		FindAnyObjectByType<Spawner>().OnNewWave += OnNewWave;
+	}
+
+	void OnNewWave(int waveNumber)
+	{
+		mapIndex = waveNumber - 1;
 		GenerateMap();
 	}
+
 
 	public void GenerateMap()
 	{
@@ -236,17 +243,36 @@ public class MapGenerator : MonoBehaviour
 			y = _y;
 		}
 
+		// 重载 == 运算符
 		public static bool operator ==(Coord c1, Coord c2)
 		{
 			return c1.x == c2.x && c1.y == c2.y;
 		}
 
+		// 重载 != 运算符
 		public static bool operator !=(Coord c1, Coord c2)
 		{
 			return !(c1 == c2);
 		}
 
+		// 重写 Equals 方法
+		public override bool Equals(object obj)
+		{
+			if (obj is Coord)
+			{
+				Coord other = (Coord)obj;
+				return this == other;
+			}
+			return false;
+		}
+
+		// 重写 GetHashCode 方法
+		public override int GetHashCode()
+		{
+			return x.GetHashCode() ^ y.GetHashCode();
+		}
 	}
+
 
 	[System.Serializable]
 	public class Map

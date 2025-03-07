@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Spawner : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class Spawner : MonoBehaviour
     bool isCamping;                       // 是否处于露营状态
 
     bool isDisabled;                     // 控制生成器是否禁用
+
+    public event Action<int> OnNewWave;
 
     void Start()
     {
@@ -123,18 +126,32 @@ public class Spawner : MonoBehaviour
         }
     }
 
+    void ResetPlayerPosition()
+    {
+        // 让玩家从中心位置 掉落生成
+        playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up *3;
+    }
+
+
     // 开始下一波敌人生成
     void NextWave()
     {
         currentWaveNumber++;
-        print("Wave: " + currentWaveNumber);  // 打印当前波数
+
         if (currentWaveNumber - 1 < waves.Length)
         {
             currentWave = waves[currentWaveNumber - 1];  // 获取当前波次的敌人数据
 
             enemiesRemainingToSpawn = currentWave.enemyCount;  // 设置当前波次敌人数量
             enemiesRemainingAlive = enemiesRemainingToSpawn;  // 设置当前波次剩余敌人数量
+            // 执行当前波数？ - 不太理解
+            if(OnNewWave != null)
+            {
+                OnNewWave(currentWaveNumber);
+            }
         }
+        // 这里可以放到切换关卡处
+        ResetPlayerPosition();
     }
 
     // 波次类，包含敌人数量和生成间隔时间
