@@ -28,13 +28,13 @@ public class LivingEntity : MonoBehaviour, IDamageable
     }
 
     // 伤害 - 设置伤害值和射线
-    public void TakeHit(float damage, RaycastHit hit)
+    public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
     {
         // To DO
         TakeDamage(damage);
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         health -= damage;
 

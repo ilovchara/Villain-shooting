@@ -24,6 +24,9 @@ public class MapGenerator : MonoBehaviour
 	Transform[,] tileMap;
 
 	Map currentMap;
+	[SerializeField]
+	public float obstacleFreeRadius = 2f; // 控制障碍物不生成的半径
+
 
 	void Awake()
 	{
@@ -100,7 +103,11 @@ public class MapGenerator : MonoBehaviour
 			obstacleMap[randomCoord.x, randomCoord.y] = true;
 			currentObstacleCount++;
 
-			if (randomCoord != currentMap.mapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
+			// 计算当前坐标到地图中心的距离
+			float distanceFromCentre = Mathf.Sqrt(Mathf.Pow(randomCoord.x - currentMap.mapCentre.x, 2) + Mathf.Pow(randomCoord.y - currentMap.mapCentre.y, 2));
+
+			// 试着在地图中心半径处不生成方块
+			if (distanceFromCentre > obstacleFreeRadius && randomCoord != currentMap.mapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
 			{
 				// 障碍物高度 - 采用插值的方式让高度保持在这两个变量之间
 				float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
@@ -286,7 +293,7 @@ public class MapGenerator : MonoBehaviour
 		public float maxObstacleHeight;
 		public Color foregroundColour;
 		public Color backgroundColour;
-
+		// 这个是起点
 		public Coord mapCentre
 		{
 			get

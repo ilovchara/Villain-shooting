@@ -12,6 +12,8 @@ public class Enemy : LivingEntity
     State currentState;
     Material skinMaterial;
 
+    public GameObject deathEffect;
+
     Color originalColor;
     NavMeshAgent pathfinder;
     Transform target;
@@ -27,7 +29,7 @@ public class Enemy : LivingEntity
     float myCollisionRadius;
     float targetCollisionRadius;
 
-    [SerializeField]float damage = 1;
+    [SerializeField] float damage = 1;
 
     bool hasTartget;
 
@@ -53,6 +55,19 @@ public class Enemy : LivingEntity
             StartCoroutine(nameof(UpdatePath));
 
         }
+    }
+    // 在敌人死亡的时候 - 释放喷血动效
+    public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+    {
+
+
+        if (damage >= health)
+        {
+            // 在特定位置和方向实例化一个死亡效果对象。
+            Destroy(Instantiate(deathEffect, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, 2f);
+        }
+        base.TakeHit(damage, hitPoint, hitDirection);
+
     }
 
     void Update()
@@ -84,7 +99,7 @@ public class Enemy : LivingEntity
         currentState = State.Attacking;
         pathfinder.enabled = false;
 
-        
+
         Vector3 originalPosition = transform.position;
         Vector3 attackPosition = target.position;
 
@@ -96,10 +111,10 @@ public class Enemy : LivingEntity
         bool hasAppliedDamage = false;
         while (percent <= 1)
         {
-            if(percent >=.5 && !hasAppliedDamage)
+            if (percent >= .5 && !hasAppliedDamage)
             {
                 hasAppliedDamage = true;
-                targetEntity.TakeDamage(damage); 
+                targetEntity.TakeDamage(damage);
             }
 
             percent += Time.deltaTime * attackSpeed;
