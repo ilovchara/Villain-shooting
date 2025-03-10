@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 // 敌人的逻辑 - 1. 寻路 2. 攻击玩家
@@ -12,7 +13,7 @@ public class Enemy : LivingEntity
     State currentState;
     Material skinMaterial;
 
-    public GameObject deathEffect;
+    public ParticleSystem deathEffect;
 
     Color originalColor;
     NavMeshAgent pathfinder;
@@ -64,7 +65,7 @@ public class Enemy : LivingEntity
         if (damage >= health)
         {
             // 在特定位置和方向实例化一个死亡效果对象。
-            Destroy(Instantiate(deathEffect, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, 2f);
+            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
         }
         base.TakeHit(damage, hitPoint, hitDirection);
 
