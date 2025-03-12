@@ -60,8 +60,6 @@ public class Enemy : LivingEntity
     // 在敌人死亡的时候 - 释放喷血动效
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
     {
-
-
         if (damage >= health)
         {
             // 在特定位置和方向实例化一个死亡效果对象。
